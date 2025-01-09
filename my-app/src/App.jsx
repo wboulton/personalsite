@@ -105,6 +105,118 @@ function Other() {
   );
 }
 
+function Newaccount() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const user = {
+      username: username,
+      password: password,
+      firstname: firstname,
+      lastname: lastname
+    };
+    console.log('New User:', user);
+    // Here you can add logic to send the user object to your backend or API
+  };
+
+  return (
+    <div style={{ margin: '20px', marginTop: '30px' }}>
+      <h1>Create New Account</h1>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '350px' }}>
+        <label>
+          Username: 
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
+          />
+        </label>
+        <label>
+          Password: 
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
+          />
+        </label>
+        <label>
+          firstname: 
+          <input
+            type="firstname"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
+          />
+        </label>
+        <label>
+          lastname: 
+          <input
+            type="lastname"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
+          />
+        </label>
+        <button type="submit" style={{ padding: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white' }}>
+          Create Account
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function Signin() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle sign-in logic here
+    console.log('Username:', username);
+    console.log('Password:', password);
+  };
+
+  return (
+    <div style={{ margin: '20px', marginTop: '30px' }}>
+      <h1>Sign In</h1>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '350px' }}>
+        <label>
+          Username: 
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
+          />
+        </label>
+        <label>
+          Password: 
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
+          />
+        </label>
+        <button type="submit" style={{ padding: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white' }}>
+          Sign In
+        </button>
+        <Link to="/newaccount" style={{textDecoration: 'none'}}>
+        <button type="new account" style={{ padding: '10px', marginTop: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white', width: '350px' }}>
+          Create Account
+        </button>
+        </Link>
+      </form>
+    </div>
+  );
+}
+
 // Main App Component
 function App() {
   const [marginX, setMarginX] = useState(20);
@@ -150,6 +262,8 @@ function App() {
           <Route path="/writeups" element={<Writeups />} />
           <Route path="/writeups/:id" element={<WriteupDetail />} />
           <Route path="/other" element={<Other />} />
+          <Route path="/signin" element={<Signin />} />
+          <Route path="/newaccount" element={<Newaccount />} />
         </Routes>
       </div>
     </Router>
