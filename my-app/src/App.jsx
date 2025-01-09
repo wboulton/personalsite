@@ -19,8 +19,12 @@ function About() {
       <p>Contact me using williamdboulton@yahoo.com.</p>
 
       <h2>Links</h2>
-      <p>LinkedIn: https://www.linkedin.com/in/william-boulton-a958832ba/</p>
-      <p>Github: https://github.com/wboulton</p>
+      <p>
+        LinkedIn: <a href="https://www.linkedin.com/in/william-boulton-a958832ba/" target="_blank" rel="noopener noreferrer">William Boulton</a>
+      </p>
+      <p>
+        Github: <a href="https://github.com/wboulton" target="_blank" rel="noopener noreferrer">wboulton</a>
+      </p>
     </div>
   );
 }
@@ -29,8 +33,7 @@ function About() {
 function Writeups() {
   const writeups = [
     { name: 'dacube', link: '/writeups/dacube' },
-    { name: 'Writeup 2', link: '/writeups/writeup2' },
-    { name: 'Writeup 3', link: '/writeups/writeup3' },
+    
   ];
 
   return (
@@ -104,7 +107,7 @@ function App() {
           <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
             <img src={reactLogo} className="logo react" alt="React logo" />
           </a>
-          <h1 style={{ fontSize: '12px', margin: '5px 0' }}>Vite + React</h1>
+          <h1 style={{ fontSize: '10px', margin: '5px 0' }}>Vite + React</h1>
         </div>
 
         {/* Content Padding to Avoid Overlap */}
