@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
+
 // About Page Component
 function About() {
   return (
@@ -32,14 +33,14 @@ function About() {
 // Writeups List Component
 function Writeups() {
   const writeups = [
-    { name: 'dacube', link: '/writeups/dacube' },
+    { name: 'DeadFace 2024 DaCube', link: '/writeups/DeadFace 2024 DaCube' },
     
   ];
 
   return (
     <div style={{ margin: '20px', marginTop: '30px' }}>
       <h1>Writeups</h1>
-      <ul>
+      <ul style={{ listStyleType: 'none', padding: 0, fontSize: '25px' }}>
         {writeups.map((writeup, index) => (
           <li key={index}>
             <Link to={writeup.link}>{writeup.name}</Link>
@@ -76,6 +77,34 @@ function WriteupDetail() {
   );
 }
 
+function Other() {
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    fetch('/Dog/images.json')
+      .then((response) => response.json())
+      .then((data) => {console.log(data); setImages(data);})
+      .catch((error) => console.error('Error fetching images:', error));
+  }, []);
+
+  return (
+    <div>
+      <h1>Doggo</h1>
+      <p>just some pictures of my dog for now</p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+        {images.map((image, index) => (
+          <img
+            key={index}
+            src={`/Dog/${image}`}
+            alt={`Dog ${index}`}
+            style={{ width: '200px', height: '200px', objectFit: 'cover', margin: '10px' }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // Main App Component
 function App() {
   const [marginX, setMarginX] = useState(20);
@@ -94,9 +123,11 @@ function App() {
           Writeups
             </button>
           </Link>
-          <button style={{ margin: '0 10px', padding: '10px 20px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-            Other
-          </button>
+          <Link to="/other" style={{textDecoration: 'none'}}>
+            <button style={{ margin: '0 10px', padding: '10px 20px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+              Other
+            </button>
+          </Link>
         </div>
 
         {/* Bottom-right corner logos and title */}
@@ -118,6 +149,7 @@ function App() {
           <Route path="/" element={<Navigate to="/about" />} />
           <Route path="/writeups" element={<Writeups />} />
           <Route path="/writeups/:id" element={<WriteupDetail />} />
+          <Route path="/other" element={<Other />} />
         </Routes>
       </div>
     </Router>
