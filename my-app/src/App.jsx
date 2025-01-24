@@ -119,7 +119,7 @@ function Newaccount() {
       firstname: firstname,
       lastname: lastname
     };
-    fetch('http://localhost:5000/api/users', {
+    fetch('http://localhost:5000/api/newuser', {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json',
@@ -128,6 +128,9 @@ function Newaccount() {
     })
     .then((response) => {
       if (!response.ok) {
+      if (response.status === 400) {
+        alert('This username is in use');
+      }
       throw new Error('Failed to create account');
       }
       return response.json();
@@ -231,33 +234,6 @@ function Signin() {
           Create Account
         </button>
         </Link>
-        <button
-          type="button"
-          style={{ padding: '10px', marginTop: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white', width: '350px' }}
-          onClick={() => {
-            fetch('http://localhost:5000/api/print', {
-              method: 'POST',
-              headers: {
-          'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ message: 'Print request triggered' }),
-            })
-              .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to trigger print');
-          }
-          return response.json();
-              })
-              .then((data) => {
-          console.log('Print triggered successfully:', data);
-              })
-              .catch((error) => {
-          console.error('Error:', error);
-              });
-          }}
-        >
-          Trigger Print
-        </button>
       </form>
     </div>
   );
@@ -269,7 +245,6 @@ function App() {
 
   return (
     <Router>
-      {/* Top bar with buttons */}
         <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', padding: '10px', color: 'white', position: 'fixed', top: '0', left: '0', width: '100%', zIndex: '1', backgroundColor: '#333' }}>
           <Link to="/about" style={{ textDecoration: 'none' }}>
             <button style={{ margin: '0 10px', padding: '10px 20px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
