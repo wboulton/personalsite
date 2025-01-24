@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import reactLogo from '../assets/react.svg';
+import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 import ReactMarkdown from 'react-markdown';
@@ -119,8 +119,27 @@ function Newaccount() {
       firstname: firstname,
       lastname: lastname
     };
-    console.log('New User:', user);
-    // Here you can add logic to send the user object to your backend or API
+    fetch('http://localhost:5000/api/users', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    })
+    .then((response) => {
+      if (!response.ok) {
+      throw new Error('Failed to create account');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Account created successfully:', data);
+      // Optionally, redirect the user or show a success message
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      // Optionally, show an error message to the user
+    });
   };
 
   return (
@@ -212,6 +231,33 @@ function Signin() {
           Create Account
         </button>
         </Link>
+        <button
+          type="button"
+          style={{ padding: '10px', marginTop: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white', width: '350px' }}
+          onClick={() => {
+            fetch('http://localhost:5000/api/print', {
+              method: 'POST',
+              headers: {
+          'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ message: 'Print request triggered' }),
+            })
+              .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to trigger print');
+          }
+          return response.json();
+              })
+              .then((data) => {
+          console.log('Print triggered successfully:', data);
+              })
+              .catch((error) => {
+          console.error('Error:', error);
+              });
+          }}
+        >
+          Trigger Print
+        </button>
       </form>
     </div>
   );
@@ -238,6 +284,11 @@ function App() {
           <Link to="/other" style={{textDecoration: 'none'}}>
             <button style={{ margin: '0 10px', padding: '10px 20px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
               Other
+            </button>
+          </Link>
+          <Link to="/signin" style={{textDecoration: 'none'}}>
+            <button style={{ margin: '0 10px', padding: '10px 20px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+              Sign In
             </button>
           </Link>
         </div>
