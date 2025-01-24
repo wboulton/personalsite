@@ -21,6 +21,8 @@ app.listen(PORT, () => {
     res.json({ message: 'Print triggered successfully' });
     console.log("response sent!");
   });
+
+  //TODO: add rsa encryption or some other security protocal 
   app.post('/api/newuser', (req, res) => {
     console.log("creating a new user");
     const { username, password, firstname, lastname } = req.body;
