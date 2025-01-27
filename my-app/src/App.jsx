@@ -6,9 +6,11 @@ import './App.css';
 import ReactMarkdown from 'react-markdown';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import CryptoJS from 'crypto-js';
 
+//other files
+import Newaccount from './Newaccount';
 
-// About Page Component
 function About() {
   return (
     <div style={{ margin: '20px', marginTop: '30px' }}>
@@ -105,94 +107,6 @@ function Other() {
   );
 }
 
-function Newaccount() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const user = {
-      username: username,
-      password: password,
-      firstname: firstname,
-      lastname: lastname
-    };
-    fetch('http://localhost:5000/api/newuser', {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-    .then((response) => {
-      if (!response.ok) {
-      if (response.status === 400) {
-        alert('This username is in use');
-      }
-      throw new Error('Failed to create account');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log('Account created successfully:', data);
-      // Optionally, redirect the user or show a success message
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      // Optionally, show an error message to the user
-    });
-  };
-
-  return (
-    <div style={{ margin: '20px', marginTop: '30px' }}>
-      <h1>Create New Account</h1>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', width: '350px' }}>
-        <label>
-          Username: 
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
-          />
-        </label>
-        <label>
-          Password: 
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
-          />
-        </label>
-        <label>
-          firstname: 
-          <input
-            type="firstname"
-            value={firstname}
-            onChange={(e) => setFirstname(e.target.value)}
-            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
-          />
-        </label>
-        <label>
-          lastname: 
-          <input
-            type="lastname"
-            value={lastname}
-            onChange={(e) => setLastname(e.target.value)}
-            style={{ margin: '10px 0 10px 10px', padding: '10px', fontSize: '16px' }}
-          />
-        </label>
-        <button type="submit" style={{ padding: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white' }}>
-          Create Account
-        </button>
-      </form>
-    </div>
-  );
-}
-
 function Signin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -230,22 +144,40 @@ function Signin() {
           Sign In
         </button>
         <Link to="/newaccount" style={{textDecoration: 'none'}}>
-        <button type="new account" style={{ padding: '10px', marginTop: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white', width: '350px' }}>
-          Create Account
-        </button>
+          <button type="button" style={{ padding: '10px', marginTop: '10px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer', color: 'white', width: '350px' }}>
+            Create Account
+          </button>
         </Link>
       </form>
     </div>
   );
 }
 
-// Main App Component
-function App() {
-  const [marginX, setMarginX] = useState(20);
+const Home = () => (
+  <div>
+    <h1>Welcome to the Home Page</h1>
+  </div>
+);
+
+const App = () => {
+  const [serverPublicKey, setServerPublicKey] = useState(null);
+
+  useEffect(() => {
+    // Fetch the server's public key on component mount
+    fetch('http://localhost:5000/api/public-key')
+      .then(response => response.json())
+      .then(data => {
+        setServerPublicKey(data.publicKey);
+      })
+      .catch(error => {
+        console.error('Error fetching server public key:', error);
+      });
+  }, []);
 
   return (
     <Router>
-        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', padding: '10px', color: 'white', position: 'fixed', top: '0', left: '0', width: '100%', zIndex: '1', backgroundColor: '#333' }}>
+      <div>
+      <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', padding: '10px', color: 'white', position: 'fixed', top: '0', left: '0', width: '100%', zIndex: '1', backgroundColor: '#333' }}>
           <Link to="/about" style={{ textDecoration: 'none' }}>
             <button style={{ margin: '0 10px', padding: '10px 20px', backgroundColor: '#7f6b00', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
           About
@@ -267,33 +199,21 @@ function App() {
             </button>
           </Link>
         </div>
-
-        {/* Bottom-right corner logos and title */}
-        <div style={{ position: 'fixed', bottom: '10px', right: '10px', textAlign: 'right' }}>
-          <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
-            <img src={viteLogo} className="logo" alt="Vite logo" style={{ marginRight: '10px' }} />
-          </a>
-          <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
-            <img src={reactLogo} className="logo react" alt="React logo" />
-          </a>
-          <h1 style={{ fontSize: '10px', margin: '5px 0' }}>Vite + React</h1>
+        <div style={{ marginTop: '60px' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/writeups" element={<Writeups />} />
+            <Route path="/writeups/:id" element={<WriteupDetail />} />
+            <Route path="/other" element={<Other />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/newaccount" element={<Newaccount serverPublicKey={serverPublicKey} />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
         </div>
-
-        {/* Content Padding to Avoid Overlap */}
-      <div style={{ marginTop: '60px' }}>
-        {/* Routes */}
-        <Routes>
-          <Route path="/about" element={<About />} />
-          <Route path="/" element={<Navigate to="/about" />} />
-          <Route path="/writeups" element={<Writeups />} />
-          <Route path="/writeups/:id" element={<WriteupDetail />} />
-          <Route path="/other" element={<Other />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/newaccount" element={<Newaccount />} />
-        </Routes>
       </div>
     </Router>
   );
-}
+};
 
 export default App;
