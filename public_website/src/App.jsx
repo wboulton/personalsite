@@ -33,7 +33,7 @@ function About() {
 function Writeups() {
   const writeups = [
     { name: 'DeadFace 2024 DaCube', link: '/writeups/DeadFace 2024 DaCube' },
-    { name: 'Bearcat World Tour 2025', link: '/writeups/Bearcat'},
+    { name: 'Bearcat World Tour 2025', link: '/writeups/Bearcat World Tour 2025'},
   ];
 
   return (
@@ -50,28 +50,29 @@ function Writeups() {
   );
 }
 
+const writeups = {
+  'DeadFace 2024 DaCube' : '/writeups/DeadFace 2024 DaCube',
+  'Bearcat World Tour 2025': '/writeups/Bearcat World Tour 2025',
+};
+
 // Writeup Detail Component
 function WriteupDetail() {
   const { id } = useParams(); // Retrieve the writeup ID from the URL
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    // Fetch the markdown file dynamically
-    fetch(`/writeups/${id}.md`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Markdown file not found');
-        }
-        return response.text();
-      })
-      .then((text) => setContent(text))
-      .catch((error) => setContent(`# Error\n\n${error.message}`));
+    const htmlContent = writeups[id];
+    if (htmlContent) {
+      setContent(htmlContent);
+    } else {
+      setContent('<h1>Error</h1><p>Markdown file not found</p>');
+    }
   }, [id]);
 
   return (
     <div style={{ margin: '20px', marginTop: '30px', textAlign: 'left' }}>
       <h1>{id.replace(/-/g, ' ')}</h1>
-      <ReactMarkdown>{content}</ReactMarkdown>
+      <div dangerouslySetInnerHTML={{ __html: content }} />
     </div>
   );
 }
