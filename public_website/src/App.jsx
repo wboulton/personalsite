@@ -50,10 +50,6 @@ function Writeups() {
   );
 }
 
-const writeups = {
-  'DeadFace 2024 DaCube' : '/writeups/DeadFace 2024 DaCube',
-  'Bearcat World Tour 2025': '/writeups/Bearcat World Tour 2025',
-};
 
 // Writeup Detail Component
 function WriteupDetail() {
@@ -61,18 +57,22 @@ function WriteupDetail() {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    const htmlContent = writeups[id];
-    if (htmlContent) {
-      setContent(htmlContent);
-    } else {
-      setContent('<h1>Error</h1><p>Markdown file not found</p>');
-    }
+    // Fetch the markdown file dynamically
+    fetch(`/public/writeups/${id}.md`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Markdown file not found');
+        }
+        return response.text();
+      })
+      .then((text) => setContent(text))
+      .catch((error) => setContent(`# Error\n\n${error.message}`));
   }, [id]);
 
   return (
     <div style={{ margin: '20px', marginTop: '30px', textAlign: 'left' }}>
       <h1>{id.replace(/-/g, ' ')}</h1>
-      <div dangerouslySetInnerHTML={{ __html: content }} />
+      <ReactMarkdown>{content}</ReactMarkdown>
     </div>
   );
 }
